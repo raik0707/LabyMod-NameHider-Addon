@@ -49,6 +49,9 @@ public class NameHiderAddon extends LabyModAddon {
         JsonObject addonConfig = this.getConfig();
 
         this.showNames = addonConfig.has("shownames") ? addonConfig.get("shownames").getAsBoolean() : this.showNames;
+
+        //Commands
+        this.commandDispatcher.loadConfig();
     }
 
     /**

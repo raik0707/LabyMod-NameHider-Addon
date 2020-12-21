@@ -1,5 +1,6 @@
 package de.raik.namehider.command;
 
+import com.google.gson.JsonObject;
 import de.raik.namehider.NameHiderAddon;
 import de.raik.namehider.settingelements.DescribedBooleanElement;
 import net.labymod.settings.elements.ControlElement;
@@ -91,6 +92,15 @@ public abstract class AddonCommand {
 
         return setting;
     }
+
+    /**
+     * Set the enabled with loading configs
+     *
+     * @param commandObject The config boject
+     */
+    public void loadConfig(JsonObject commandObject) {
+        this.enabled = commandObject.has(this.getName()) ? commandObject.get(this.getName()).getAsBoolean() : this.enabled;
+     }
 
     /**
      * Method to set the name of a command

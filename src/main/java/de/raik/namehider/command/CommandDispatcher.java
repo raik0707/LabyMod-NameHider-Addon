@@ -44,12 +44,23 @@ public class CommandDispatcher implements MessageSendEvent {
         //Register event
         addon.getApi().getEventManager().register(this);
 
+        //Registering commands
+        this.commands.add(new NameHiderCommand(this.addon));
+    }
+
+    /**
+     * Loading the configs for commands
+     * to set enabled
+     */
+    public void loadConfig() {
         //Adding config
         if (!addon.getConfig().has("commands"))
             addon.getConfig().add("commands", new JsonObject());
 
-        //Registering commands
-        this.commands.add(new NameHiderCommand(this.addon));
+        JsonObject commandsObject = this.addon.getConfig().getAsJsonObject("commands");
+
+        //Set for commands
+        this.commands.forEach(command -> command.loadConfig(commandsObject));
     }
 
     /**
