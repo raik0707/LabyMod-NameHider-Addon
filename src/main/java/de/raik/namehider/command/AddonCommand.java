@@ -1,5 +1,9 @@
 package de.raik.namehider.command;
 
+import de.raik.namehider.NameHiderAddon;
+import de.raik.namehider.settingelements.DescribedBooleanElement;
+import net.labymod.settings.elements.ControlElement;
+
 /**
  * Abstract super class for
  * an addon command
@@ -58,11 +62,43 @@ public abstract class AddonCommand {
     }
 
     /**
+     * Getter for the setting element of the command
+     * adding additional callback for changing enabled
+     *
+     * @param addon The addon instance for creating the setting
+     * @return The setting element
+     */
+    public DescribedBooleanElement getSetting(NameHiderAddon addon) {
+        //Creating setting and adding additional callback
+        DescribedBooleanElement setting = new DescribedBooleanElement("/" + this.getName(), addon, this.getIcon()
+                , this.getName(), this.enabled , this.getDescription(), addon.getConfig().getAsJsonObject("commands"), true);
+        setting.addCallback(changedValue -> this.enabled = changedValue);
+
+        return setting;
+    }
+
+    /**
      * Method to set the name of a command
-     * in a child class
+     * in a sub class
      *
      * @return the name
      */
     public abstract String getName();
+
+    /**
+     * Method to set the icon of a command
+     * in a sub class
+     *
+     * @return the icon
+     */
+    public abstract ControlElement.IconData getIcon();
+
+    /**
+     * Method to set the description of a command
+     * in a sub class
+     *
+     * @return the description
+     */
+    public abstract String getDescription();
 
 }

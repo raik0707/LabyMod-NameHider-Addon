@@ -1,5 +1,6 @@
 package de.raik.namehider.settingelements;
 
+import com.google.gson.JsonObject;
 import net.labymod.api.LabyModAddon;
 import net.labymod.settings.elements.BooleanElement;
 
@@ -24,10 +25,19 @@ public class DescribedBooleanElement extends BooleanElement {
      * @param attributeName The name of the config attribute
      * @param defaultValue The default value of the element
      * @param description The setting description
+     * @param configElement The config json to edit
+     * @param save If true the changes will be saved
      */
     public DescribedBooleanElement(String displayName, final LabyModAddon addon, IconData iconData
-            , final String attributeName, boolean defaultValue, final String description) {
-        super(displayName, addon, iconData, attributeName, defaultValue);
+            , final String attributeName, boolean defaultValue, final String description, JsonObject configElement
+            , boolean save) {
+        super(displayName, iconData, changedValue -> {
+            configElement.addProperty(attributeName, changedValue);
+            if (save) {
+                addon.saveConfig();
+                addon.loadConfig();
+            }
+        }, defaultValue);
 
         this.setDescriptionText(description);
     }
