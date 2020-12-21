@@ -9,6 +9,9 @@ import net.labymod.settings.elements.ControlElement;
 import net.minecraft.client.Minecraft;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Command class for the
@@ -25,6 +28,11 @@ public class NameHiderCommand extends AddonCommand {
      * of the addon settings
      */
     private static final Field OPENED_SETTINGS_FIELD;
+
+    /**
+     * Executor service for async task execution
+     */
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     /*
      * Static block to set the addon field
@@ -67,14 +75,16 @@ public class NameHiderCommand extends AddonCommand {
         AddonInfoManager.getInstance().init();
         AddonInfo addonInfo = AddonInfoManager.getInstance().getAddonInfoMap().get(this.getAddon().about.uuid);
 
-        LabyModAddonsGui addonsGui = new LabyModAddonsGui(Minecraft.getMinecraft().currentScreen);
+        LabyModAddonsGui addonsGui = new LabyModAddonsGui(null);
         try {
             OPENED_SETTINGS_FIELD.set(addonsGui, addonInfo.getAddonElement());
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
         }
 
-        Minecraft.getMinecraft().displayGuiScreen(addonsGui);
+        //Executing displaying with async thread to add it as mc thread
+        this.executorService.schedule(() -> Minecraft.getMinecraft().addScheduledTask(() ->
+                Minecraft.getMinecraft().displayGuiScreen(addonsGui)), 100, TimeUnit.MILLISECONDS);
     }
 
     /**

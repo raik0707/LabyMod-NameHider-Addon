@@ -28,7 +28,7 @@ public class NameHiderAddon extends LabyModAddon {
     /**
      * Command handling class in the addon
      */
-    private final CommandDispatcher commandDispatcher = new CommandDispatcher(this);
+    private CommandDispatcher commandDispatcher;
 
     /**
      * Init method called by
@@ -38,6 +38,9 @@ public class NameHiderAddon extends LabyModAddon {
     public void onEnable() {
         //Setting core adapter to apply the changes to the rendering
         LabyModCore.setCoreAdapter(new HiderCoreImplementation(this));
+
+        //Creating command dispatcher
+        commandDispatcher = new CommandDispatcher(this);
     }
 
     /**

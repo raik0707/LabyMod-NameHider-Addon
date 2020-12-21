@@ -49,6 +49,10 @@ public abstract class AddonCommand {
      * @return Logical value if it can be dispatched
      */
     public boolean dispatch(String sentMessage) {
+        //Break if disabled
+        if (!this.enabled)
+            return false;
+
         String commandName = this.getName();
 
         /*
