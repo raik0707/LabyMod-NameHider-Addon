@@ -2,6 +2,7 @@ package de.raik.namehider.command;
 
 import com.google.gson.JsonObject;
 import de.raik.namehider.NameHiderAddon;
+import de.raik.namehider.command.commands.NameHiderCommand;
 import net.labymod.api.events.MessageSendEvent;
 import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
@@ -48,6 +49,7 @@ public class CommandDispatcher implements MessageSendEvent {
             addon.getConfig().add("commands", new JsonObject());
 
         //Registering commands
+        this.commands.add(new NameHiderCommand(this.addon));
     }
 
     /**

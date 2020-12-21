@@ -17,6 +17,21 @@ public abstract class AddonCommand {
     private boolean enabled = true;
 
     /**
+     * Addon instance for accessing the addon in the Commands
+     */
+    private final NameHiderAddon addon;
+
+    /**
+     * Constructor to set addon
+     * variable
+     *
+     * @param addon The addon
+     */
+    public AddonCommand(NameHiderAddon addon) {
+        this.addon = addon;
+    }
+
+    /**
      * Abstract method called on execution
      * of the command
      *
@@ -101,4 +116,12 @@ public abstract class AddonCommand {
      */
     public abstract String getDescription();
 
+    /**
+     * Getter for the addon
+     *
+     * @return The addon
+     */
+    public NameHiderAddon getAddon() {
+        return this.addon;
+    }
 }

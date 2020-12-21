@@ -1,6 +1,7 @@
 package de.raik.namehider;
 
 import com.google.gson.JsonObject;
+import de.raik.namehider.command.CommandDispatcher;
 import de.raik.namehider.implementation.HiderCoreImplementation;
 import net.labymod.api.LabyModAddon;
 import net.labymod.core.LabyModCore;
@@ -23,6 +24,11 @@ public class NameHiderAddon extends LabyModAddon {
      * If true names will show
      */
     private boolean showNames = true;
+
+    /**
+     * Command handling class in the addon
+     */
+    private final CommandDispatcher commandDispatcher = new CommandDispatcher(this);
 
     /**
      * Init method called by
@@ -58,6 +64,9 @@ public class NameHiderAddon extends LabyModAddon {
         //Setting for the show Names property setting the value
         settings.add(new BooleanElement("Show player names", new ControlElement.IconData("labymod/textures/settings/settings/showmyname.png")
                 , changeValue -> this.showNames = changeValue, this.showNames));
+
+        //Commands
+        this.commandDispatcher.addCommandSettings(settings);
     }
 
     public boolean isShowNames() {
