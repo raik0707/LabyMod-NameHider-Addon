@@ -26,6 +26,11 @@ public class NameHiderAddon extends LabyModAddon {
     private boolean showNames = true;
 
     /**
+     * Display configuration of the whole addon
+     */
+    private DisplayConfiguration configuration = new DisplayConfiguration(this, false);
+
+    /**
      * Command handling class in the addon
      */
     private CommandDispatcher commandDispatcher;
@@ -75,7 +80,25 @@ public class NameHiderAddon extends LabyModAddon {
         this.commandDispatcher.addCommandSettings(settings);
     }
 
-    public boolean isShowNames() {
+    /**
+     * Method to get a user specific configuration
+     * returning default if the user hasn't any
+     *
+     * @param name The user name
+     * @return The configuration
+     */
+    public DisplayConfiguration receiveConfigurationForPlayer(String name) {
+        return this.configuration;
+    }
+
+    /**
+     * Getter for showNames
+     * protected for only letting DisplayConfiguration
+     * access
+     *
+     * @return The value
+     */
+    protected boolean isShowNames() {
         return showNames;
     }
 }
