@@ -56,7 +56,7 @@ public class NameHiderAddon extends LabyModAddon {
         //Settings
 
         //Setting for the show Names property setting the value
-        settings.add(new BooleanElement("Show Names", new ControlElement.IconData("labymod/textures/settings/settings/showmyname.png")
+        settings.add(new BooleanElement("Show player names", new ControlElement.IconData("labymod/textures/settings/settings/showmyname.png")
                 , changeValue -> this.showNames = changeValue, this.showNames));
     }
 
