@@ -32,8 +32,8 @@ public class DescribedBooleanElement extends BooleanElement {
             , final String attributeName, boolean defaultValue, final String description, JsonObject configElement
             , boolean save) {
         super(displayName, iconData, changedValue -> {
-            configElement.addProperty(attributeName, changedValue);
             if (save) {
+                configElement.addProperty(attributeName, changedValue);
                 addon.saveConfig();
                 addon.loadConfig();
             }

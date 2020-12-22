@@ -3,11 +3,14 @@ package de.raik.namehider;
 import com.google.gson.JsonObject;
 import de.raik.namehider.command.CommandDispatcher;
 import de.raik.namehider.implementation.HiderCoreImplementation;
+import de.raik.namehider.settingelements.DescribedBooleanElement;
 import net.labymod.api.LabyModAddon;
 import net.labymod.core.LabyModCore;
+import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
+import net.labymod.utils.Material;
 
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class NameHiderAddon extends LabyModAddon {
     /**
      * Display configuration of the whole addon
      */
-    private DisplayConfiguration configuration = new DisplayConfiguration(this, false);
+    private final DisplayConfiguration configuration = new DisplayConfiguration(this, false);
 
     /**
      * Command handling class in the addon
@@ -56,7 +59,18 @@ public class NameHiderAddon extends LabyModAddon {
     public void loadConfig() {
         JsonObject addonConfig = this.getConfig();
 
+        //General Settings
         this.showNames = addonConfig.has("shownames") ? addonConfig.get("shownames").getAsBoolean() : this.showNames;
+
+        //Configuration
+        if (addonConfig.has("yellowpen"))
+            this.configuration.setYellowPen(addonConfig.get("yellowpen").getAsBoolean());
+        if (addonConfig.has("ranks"))
+            this.configuration.setRanks(addonConfig.get("ranks").getAsBoolean());
+        if (addonConfig.has("subtitles"))
+            this.configuration.setSubtitles(addonConfig.get("subtitles").getAsBoolean());
+        if (addonConfig.has("scoreboards"))
+            this.configuration.setScoreboards(addonConfig.get("scoreboards").getAsBoolean());
 
         //Commands
         this.commandDispatcher.loadConfig();
@@ -73,8 +87,28 @@ public class NameHiderAddon extends LabyModAddon {
         //Settings
 
         //Setting for the show Names property setting the value
-        settings.add(new BooleanElement("Show player names", new ControlElement.IconData("labymod/textures/settings/settings/showmyname.png")
-                , changeValue -> this.showNames = changeValue, this.showNames));
+        BooleanElement showNamesElement = new BooleanElement("Show player names"
+                , new ControlElement.IconData("labymod/textures/settings/settings/showmyname.png")
+                , changeValue -> this.showNames = changeValue, this.showNames);
+        Settings showNamesSubSettings = showNamesElement.getSubSettings();
+
+        //Configurations
+        showNamesSubSettings.add(new DescribedBooleanElement("Yellow pen", this
+                , new ControlElement.IconData(Material.BREAD), "yellowpen", this.configuration.isYellowPen()
+                , "If disabled, the yellow pen next to custom name tags will be hidden", this.getConfig(), false)
+                .addCallback(this.configuration::setYellowPen));
+        showNamesSubSettings.add(new DescribedBooleanElement("Ranks", this
+                , new ControlElement.IconData("labymod/textures/misc/crown.png"), "ranks", this.configuration.isRanks()
+                , "If disabled, rank badges or tags won't show next to the player name", this.getConfig(), false)
+                .addCallback(this.configuration::setRanks));
+        showNamesSubSettings.add(new DescribedBooleanElement("Subtitles", this
+                , new ControlElement.IconData(Material.REDSTONE), "subtitles", this.configuration.isSubtitles()
+                , "If disabled, the subtitle set by the servers won't show.", this.getConfig(), false)
+                .addCallback(this.configuration::setSubtitles));
+        showNamesSubSettings.add(new DescribedBooleanElement("Scoreboards", this
+                , new ControlElement.IconData("labymod/textures/settings/modules/scoreboard_background.png"), "scoreboards"
+                , this.configuration.isScoreboards(), "If disabled, scoreboards shown below the name will be hidden"
+                , this.getConfig(), false).addCallback(this.configuration::setScoreboards));
 
         //Commands
         this.commandDispatcher.addCommandSettings(settings);

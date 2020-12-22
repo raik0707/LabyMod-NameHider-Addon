@@ -77,31 +77,31 @@ public class DisplayConfiguration {
         return this.yellowPen;
     }
 
-    public void toggleYellowPen() {
-        this.yellowPen = !this.yellowPen;
+    public void setYellowPen(boolean yellowPen) {
+        this.yellowPen = yellowPen;
     }
 
     public boolean isRanks() {
         return this.ranks;
     }
 
-    public void toggleRanks() {
-        this.ranks = !this.ranks;
+    public void setRanks(boolean ranks) {
+        this.ranks = ranks;
     }
 
     public boolean isSubtitles() {
         return this.subtitles;
     }
 
-    public void toggleSubtitles() {
-        this.subtitles = !this.subtitles;
+    public void setSubtitles(boolean subtitles) {
+        this.subtitles = subtitles;
     }
 
     public boolean isScoreboards() {
         return this.scoreboards;
     }
 
-    public void toggleScoreboards() {
-        this.scoreboards = !this.scoreboards;
+    public void setScoreboards(boolean scoreboards) {
+        this.scoreboards = scoreboards;
     }
 }
