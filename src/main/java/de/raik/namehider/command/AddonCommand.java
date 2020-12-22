@@ -77,7 +77,7 @@ public abstract class AddonCommand {
             return true;
         }
         //Executing
-        this.execute(sentMessage.substring(commandName.length() + 2).split(" "));
+        this.execute(sentMessage.substring(commandName.length() + 1).split(" "));
         return true;
     }
 

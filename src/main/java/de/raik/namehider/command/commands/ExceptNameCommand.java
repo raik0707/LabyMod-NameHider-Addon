@@ -70,7 +70,7 @@ public class ExceptNameCommand extends AddonCommand {
         }
 
         //Success message
-        LabyMod.getInstance().displayMessageInChat("§aAttribute \"" + arguments[1].toLowerCase() + "\" updated for " + arguments[0] + "'s nickname.");
+        LabyMod.getInstance().displayMessageInChat("§aAttribute \"" + arguments[1].toLowerCase() + "\" toggled for " + arguments[0] + "'s nickname.");
     }
 
     /**
