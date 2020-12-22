@@ -126,7 +126,7 @@ public class HiderRenderPlayerImplementation extends RenderPlayerImplementation 
         if (subTitle != null && configuration.isSubtitles()) {
             GlStateManager.pushMatrix();
             size = user.getSubTitleSize();
-            GlStateManager.translate(0.0D, -0.2D + size / 8.0D, 8.0D);
+            GlStateManager.translate(0.0D, -0.2D + size / 8.0D, 0.0D);
             this.renderLivingLabelCustom(renderPlayer, entity, subTitle, x, y, z, 64, (float) size);
             y += size / 6.0D;
             GlStateManager.popMatrix();

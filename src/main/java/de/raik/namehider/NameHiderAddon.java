@@ -110,6 +110,8 @@ public class NameHiderAddon extends LabyModAddon {
                 , this.configuration.isScoreboards(), "If disabled, scoreboards shown below the name will be hidden"
                 , this.getConfig(), false).addCallback(this.configuration::setScoreboards));
 
+        settings.add(showNamesElement);
+
         //Commands
         this.commandDispatcher.addCommandSettings(settings);
     }
