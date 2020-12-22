@@ -12,6 +12,7 @@ import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,6 +45,11 @@ public class NameHiderAddon extends LabyModAddon {
      * Executor service for executing code async
      */
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    /**
+     * Map to save user specific configurations
+     */
+    private final HashMap<String, DisplayConfiguration> userConfigurations = new HashMap<>();
 
     /**
      * Init method called by
@@ -158,7 +164,16 @@ public class NameHiderAddon extends LabyModAddon {
      * @return The configuration
      */
     public DisplayConfiguration receiveConfigurationForPlayer(String name) {
-        return this.configuration;
+        return this.userConfigurations.getOrDefault(name.toLowerCase(), this.configuration);
+    }
+
+    /**
+     * Getter for the configurations for editing
+     *
+     * @return The configuration
+     */
+    public HashMap<String, DisplayConfiguration> getUserConfigurations() {
+        return this.userConfigurations;
     }
 
     /**
