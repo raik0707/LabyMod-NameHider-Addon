@@ -3,6 +3,7 @@ package de.raik.namehider;
 import com.google.gson.JsonObject;
 import de.raik.namehider.command.CommandDispatcher;
 import de.raik.namehider.implementation.HiderCoreImplementation;
+import de.raik.namehider.settingelements.ButtonElement;
 import de.raik.namehider.settingelements.DescribedBooleanElement;
 import net.labymod.api.LabyModAddon;
 import net.labymod.core.LabyModCore;
@@ -12,6 +13,8 @@ import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Addon instance
@@ -36,6 +39,11 @@ public class NameHiderAddon extends LabyModAddon {
      * Command handling class in the addon
      */
     private CommandDispatcher commandDispatcher;
+
+    /**
+     * Executor service for executing code async
+     */
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     /**
      * Init method called by
@@ -111,8 +119,35 @@ public class NameHiderAddon extends LabyModAddon {
 
         settings.add(showNamesElement);
 
+        //Button element to save the config
+        settings.add(new ButtonElement("Save Config", new ControlElement.IconData("labymod/textures/buttons/update.png")
+                , buttonElement -> executorService.execute(() -> {
+                    buttonElement.setEnabled(false);
+                    this.saveConfiguration();
+                    buttonElement.setEnabled(true);
+        }), "Save", "Saves the config made as default."));
+
         //Commands
         this.commandDispatcher.addCommandSettings(settings);
+    }
+
+    /**
+     * Method to save
+     * the default configuration
+     */
+    private void saveConfiguration() {
+        JsonObject addonConfig = this.getConfig();
+
+        //Set properties
+        addonConfig.addProperty("shownames", this.showNames);
+        addonConfig.addProperty("yellowpen", this.configuration.isYellowPen());
+        addonConfig.addProperty("ranks", this.configuration.isRanks());
+        addonConfig.addProperty("subtitles", this.configuration.isSubtitles());
+        addonConfig.addProperty("scoreboards", this.configuration.isScoreboards());
+
+        //Saving
+        this.saveConfig();
+        this.loadConfig();
     }
 
     /**
