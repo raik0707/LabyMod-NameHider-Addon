@@ -10,7 +10,9 @@ import net.labymod.core.LabyModCore;
 import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
+import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
+import net.minecraft.client.Minecraft;
 
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +134,23 @@ public class NameHiderAddon extends LabyModAddon {
                     this.saveConfiguration();
                     buttonElement.setEnabled(true);
         }), "Save", "Saves the config made as default."));
+
+        //User configurations
+        settings.add(new HeaderElement("§eUser configurations"));
+        //List users
+        settings.add(new ButtonElement("List configured users", new ControlElement.IconData("labymod/textures/settings/settings/publicserverlist.png")
+                , buttonElement -> {
+            Minecraft.getMinecraft().displayGuiScreen(null);
+            this.getApi().displayMessageInChat("§eConfigured users:");
+            this.userConfigurations.keySet().forEach(key -> this.getApi().displayMessageInChat("§7- §e" + key));
+        }, "List", "Lists all configured players"));
+        //Clear cache
+        settings.add(new ButtonElement("Clear configured users", new ControlElement.IconData("labymod/textures/buttons/trash.png")
+                , buttonElement -> {
+            Minecraft.getMinecraft().displayGuiScreen(null);
+            this.getApi().displayMessageInChat("§cCleared configured users");
+            this.userConfigurations.clear();
+        }, "Clear", "Clears every user specific configuration."));
 
         //Commands
         this.commandDispatcher.addCommandSettings(settings);
