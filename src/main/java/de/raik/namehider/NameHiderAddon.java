@@ -10,7 +10,6 @@ import net.labymod.settings.Settings;
 import net.labymod.settings.elements.BooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
-import net.labymod.utils.Material;
 
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class NameHiderAddon extends LabyModAddon {
 
         //Configurations
         showNamesSubSettings.add(new DescribedBooleanElement("Yellow pen", this
-                , new ControlElement.IconData(Material.BREAD), "yellowpen", this.configuration.isYellowPen()
+                , new ControlElement.IconData("labymod/addons/namehider/yellow_pen.png"), "yellowpen", this.configuration.isYellowPen()
                 , "If disabled, the yellow pen next to custom name tags will be hidden", this.getConfig(), false)
                 .addCallback(this.configuration::setYellowPen));
         showNamesSubSettings.add(new DescribedBooleanElement("Ranks", this
@@ -102,7 +101,7 @@ public class NameHiderAddon extends LabyModAddon {
                 , "If disabled, rank badges or tags won't show next to the player name", this.getConfig(), false)
                 .addCallback(this.configuration::setRanks));
         showNamesSubSettings.add(new DescribedBooleanElement("Subtitles", this
-                , new ControlElement.IconData(Material.REDSTONE), "subtitles", this.configuration.isSubtitles()
+                , new ControlElement.IconData("labymod/addons/namehider/subtitles.png"), "subtitles", this.configuration.isSubtitles()
                 , "If disabled, the subtitle set by the servers won't show.", this.getConfig(), false)
                 .addCallback(this.configuration::setSubtitles));
         showNamesSubSettings.add(new DescribedBooleanElement("Scoreboards", this
