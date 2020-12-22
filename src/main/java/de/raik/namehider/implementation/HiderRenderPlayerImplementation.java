@@ -6,6 +6,9 @@ import net.labymod.core_implementation.mc18.RenderPlayerImplementation;
 import net.labymod.main.LabyMod;
 import net.labymod.mojang.RenderPlayerHook;
 import net.labymod.user.User;
+import net.labymod.user.group.EnumGroupDisplayType;
+import net.labymod.user.group.LabyGroup;
+import net.labymod.utils.ModColor;
 import net.labymod.utils.manager.TagManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -14,6 +17,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.Scoreboard;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -112,6 +118,86 @@ public class HiderRenderPlayerImplementation extends RenderPlayerImplementation 
             GlStateManager.popMatrix();
             return;
         }
+        //Not sneaking
+        double size;
+
+        //Subtitle
+        String subTitle = user.getSubTitle();
+        if (subTitle != null && configuration.isSubtitles()) {
+            GlStateManager.pushMatrix();
+            size = user.getSubTitleSize();
+            GlStateManager.translate(0.0D, -0.2D + size / 8.0D, 8.0D);
+            this.renderLivingLabelCustom(renderPlayer, entity, subTitle, x, y, z, 64, (float) size);
+            y += size / 6.0D;
+            GlStateManager.popMatrix();
+        }
+
+        //Scoreboard
+        if (distance < 100.0D && configuration.isScoreboards()) {
+            Scoreboard scoreboard = entity.getWorldScoreboard();
+            ScoreObjective scoreObjective = scoreboard.getObjectiveInDisplaySlot(2);
+            if (scoreObjective != null) {
+                Score score = scoreboard.getValueFromObjective(entity.getName(), scoreObjective);
+                this.renderLivingLabelCustom(renderPlayer, entity, score.getScorePoints() + " " + scoreObjective.getDisplayName()
+                        , x, y, z, 64);
+                y += (float)LabyMod.getInstance().getDrawUtils().getFontRenderer().FONT_HEIGHT * 1.15F * 0.02666667F;
+            }
+        }
+
+        //Name rendering
+        this.renderLivingLabelCustom(renderPlayer, entity, username, x, y, z, 64);
+
+        //Pen
+        if (configuration.isYellowPen() && tag != null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate((float)x, (float)y + entity.height + 0.5F, (float)z);
+            GlStateManager.rotate(-renderPlayer.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(fixedPlayerViewX, 1.0F, 0.0F, 0.0F);
+            GlStateManager.scale(-0.01666667F, -0.01666667F, 0.01666667F);
+            GlStateManager.translate(0.0F, 2.0F, 0.0F);
+            GlStateManager.disableLighting();
+            GlStateManager.enableBlend();
+            fontRenderer.drawString("✎", 5 + (int)((double)fontRenderer.getStringWidth(username) * 0.8D), 0, ModColor.toRGB(255, 255, 0, 255));
+            GlStateManager.disableBlend();
+            GlStateManager.enableLighting();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.popMatrix();
+        }
+
+        //Groups
+        if (!configuration.isRanks())
+            return;
+
+        LabyGroup group = user.getGroup();
+        //Beside name
+        if (group.getDisplayType() == EnumGroupDisplayType.BESIDE_NAME) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate((float)x, (float)y + entity.height + 0.5F, (float)z);
+            GlStateManager.rotate(-renderPlayer.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(fixedPlayerViewX, 1.0F, 0.0F, 0.0F);
+            GlStateManager.scale(-0.02666667F, -0.02666667F, 0.02666667F);
+            GlStateManager.disableLighting();
+            GlStateManager.disableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            size = ((float) (-fontRenderer.getStringWidth(username) / 2) - 2 - 8);
+            group.renderBadge(size, -0.5D, 8.0D, 8.0D, false);
+            GlStateManager.enableLighting();
+            GlStateManager.disableBlend();
+            GlStateManager.resetColor();
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.popMatrix();
+            return;
+        }
+
+        if (group.getDisplayType() != EnumGroupDisplayType.ABOVE_HEAD)
+            return;
+
+        GlStateManager.pushMatrix();
+        size = 0.5D;
+        GlStateManager.scale(size, size, size);
+        GlStateManager.translate(0.0D, 2.0D, 0.0D);
+        this.renderLivingLabelCustom(renderPlayer, entity, group.getDisplayTag(), x / size, (y  + 0.3D) / size, z / size, 10);
+        GlStateManager.popMatrix();
     }
 
 }
