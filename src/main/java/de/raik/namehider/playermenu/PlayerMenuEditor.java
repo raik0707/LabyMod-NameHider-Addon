@@ -2,6 +2,7 @@ package de.raik.namehider.playermenu;
 
 import de.raik.namehider.FeatureSection;
 import de.raik.namehider.NameHiderAddon;
+import de.raik.namehider.playermenu.entries.RemoveTagEntry;
 import net.labymod.api.events.UserMenuActionEvent;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.user.User;
@@ -37,6 +38,9 @@ public class PlayerMenuEditor extends FeatureSection implements UserMenuActionEv
 
         //Register event
         addon.getApi().getEventManager().register(this);
+
+        //Adding element
+        this.entries.add(new RemoveTagEntry(this));
     }
 
     /**
@@ -50,7 +54,7 @@ public class PlayerMenuEditor extends FeatureSection implements UserMenuActionEv
      */
     @Override
     public void createActions(User user, EntityPlayer entityPlayer, NetworkPlayerInfo networkPlayerInfo, List<UserActionEntry> playerMenuEntries) {
-        this.entries.forEach(entry -> entry.addIfPossible(playerMenuEntries));
+        this.entries.forEach(entry -> entry.addIfPossible(playerMenuEntries, entityPlayer));
     }
 
     /**

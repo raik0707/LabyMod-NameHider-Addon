@@ -4,9 +4,18 @@ import com.google.gson.JsonObject;
 import de.raik.namehider.settingelements.DescribedBooleanElement;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.user.util.UserActionEntry;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.List;
 
+/**
+ * Addon menu entry super class
+ * to define sub entries of
+ * the player menu
+ *
+ * @author Raik
+ * @version 1.0
+ */
 public abstract class AddonMenuEntry extends UserActionEntry {
 
     private boolean enabled = false;
@@ -17,18 +26,18 @@ public abstract class AddonMenuEntry extends UserActionEntry {
     private final PlayerMenuEditor playerMenuEditor;
 
     /**
-     * Constructor matching super
-     * to set the things
+     * Constructor to set player menu entry
      *
-     * @param displayName displayName
-     * @param type type
-     * @param value value
-     * @param executor executor
      * @param playerMenuEditor playerMenuEditor
      */
-    public AddonMenuEntry(String displayName, EnumActionType type, String value, ActionExecutor executor, PlayerMenuEditor playerMenuEditor) {
-        super(displayName, type, value, executor);
+    public AddonMenuEntry(PlayerMenuEditor playerMenuEditor) {
+        //Calling super with default things to set it later
+        super("", EnumActionType.NONE, null, null);
 
+        //Setting name
+        this.setDisplayName(this.getName());
+
+        //Setting instance
         this.playerMenuEditor = playerMenuEditor;
     }
 
@@ -36,8 +45,9 @@ public abstract class AddonMenuEntry extends UserActionEntry {
      * Adding player menu entry possible
      *
      * @param playerMenuEntries the list to add the entry to
+     * @param entityPlayer the entityplayer to handle it
      */
-    public void addIfPossible(List<UserActionEntry> playerMenuEntries) {
+    public void addIfPossible(List<UserActionEntry> playerMenuEntries, EntityPlayer entityPlayer) {
         if (this.enabled)
             playerMenuEntries.add(this);
     }
