@@ -200,6 +200,15 @@ public class NameHiderAddon extends LabyModAddon {
     }
 
     /**
+     * Getting sub features for comparing
+     *
+     * @return The featureset
+     */
+    public LinkedHashSet<FeatureSection> getSubFeatures() {
+        return this.subFeatures;
+    }
+
+    /**
      * Getter for showNames
      * protected for only letting DisplayConfiguration
      * access

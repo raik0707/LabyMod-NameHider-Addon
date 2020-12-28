@@ -34,12 +34,20 @@ public abstract class AddonMenuEntry extends UserActionEntry {
         //Calling super with default things to set it later
         super("", EnumActionType.NONE, null, null);
 
-        //Setting name
+        //Setting settings
         this.setDisplayName(this.getName());
+        this.setExecutor(new AddonEntryExecutor(this::execute));
 
         //Setting instance
         this.playerMenuEditor = playerMenuEditor;
     }
+
+    /**
+     * Execution method for the executor
+     *
+     * @param entityPlayer The entityPlayer to validate
+     */
+    public abstract void execute(EntityPlayer entityPlayer);
 
     /**
      * Adding player menu entry possible

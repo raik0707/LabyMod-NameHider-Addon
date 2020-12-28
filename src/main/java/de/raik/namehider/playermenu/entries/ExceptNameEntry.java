@@ -1,7 +1,9 @@
 package de.raik.namehider.playermenu.entries;
 
 import com.google.gson.JsonObject;
+import de.raik.namehider.FeatureSection;
 import de.raik.namehider.NameHiderAddon;
+import de.raik.namehider.command.CommandDispatcher;
 import de.raik.namehider.playermenu.AddonMenuEntry;
 import de.raik.namehider.playermenu.PlayerMenuEditor;
 import net.labymod.settings.elements.ControlElement;
@@ -20,6 +22,12 @@ import java.util.List;
 public class ExceptNameEntry extends AddonMenuEntry {
 
     /**
+     * Command dispatcher for accessing command handling
+     * to perferm commands
+     */
+    private CommandDispatcher commandDispatcher = null;
+
+    /**
      * Constructor to set player menu entry
      *
      * @param playerMenuEditor playerMenuEditor
@@ -27,9 +35,24 @@ public class ExceptNameEntry extends AddonMenuEntry {
     public ExceptNameEntry(PlayerMenuEditor playerMenuEditor) {
         super(playerMenuEditor);
 
-        //Setting attributes
-        this.setType(EnumActionType.RUN_COMMAND);
-        this.setValue("namehider {name}");
+        //Getting command dispatcher
+        for (FeatureSection featureSection: this.getPlayerMenuEditor().getAddon().getSubFeatures()) {
+            if (featureSection instanceof CommandDispatcher) {
+                this.commandDispatcher = (CommandDispatcher) featureSection;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Execution method for the executor
+     *
+     * @param entityPlayer The entityPlayer to validate
+     */
+    @Override
+    public void execute(EntityPlayer entityPlayer) {
+        //Calling command on command dispatcher
+        this.commandDispatcher.onSend("/exceptname " + entityPlayer.getName());
     }
 
     /**
@@ -49,7 +72,7 @@ public class ExceptNameEntry extends AddonMenuEntry {
         if (addonConfig.has("commands")) {
             JsonObject commandsObject = addonConfig.getAsJsonObject("commands");
             //Breaking if disabled
-            if (commandsObject.has("namehider") && !commandsObject.get("namehider").getAsBoolean())
+            if (commandsObject.has("exceptname") && !commandsObject.get("exceptname").getAsBoolean())
                 return;
         }
 

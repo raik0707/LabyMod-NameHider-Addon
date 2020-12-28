@@ -1,6 +1,5 @@
 package de.raik.namehider.playermenu.entries;
 
-import de.raik.namehider.playermenu.AddonEntryExecutor;
 import de.raik.namehider.playermenu.AddonMenuEntry;
 import de.raik.namehider.playermenu.PlayerMenuEditor;
 import net.labymod.gui.GuiTagsAdd;
@@ -23,9 +22,6 @@ public class ChangeTagEntry extends AddonMenuEntry {
      */
     public ChangeTagEntry(PlayerMenuEditor playerMenuEditor) {
         super(playerMenuEditor);
-
-        //Set executor to call execute
-        this.setExecutor(new AddonEntryExecutor(this::execute));
     }
 
     /**
@@ -34,7 +30,8 @@ public class ChangeTagEntry extends AddonMenuEntry {
      *
      * @param entityPlayer The entityPlayer
      */
-    private void execute(EntityPlayer entityPlayer) {
+    @Override
+    public void execute(EntityPlayer entityPlayer) {
         Minecraft.getMinecraft().displayGuiScreen(new GuiTagsAdd(null, entityPlayer.getName()));
     }
 

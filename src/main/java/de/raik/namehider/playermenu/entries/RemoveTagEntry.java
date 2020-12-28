@@ -1,6 +1,5 @@
 package de.raik.namehider.playermenu.entries;
 
-import de.raik.namehider.playermenu.AddonEntryExecutor;
 import de.raik.namehider.playermenu.AddonMenuEntry;
 import de.raik.namehider.playermenu.PlayerMenuEditor;
 import net.labymod.main.lang.LanguageManager;
@@ -31,9 +30,6 @@ public class RemoveTagEntry extends AddonMenuEntry {
      */
     public RemoveTagEntry(PlayerMenuEditor playerMenuEditor) {
         super(playerMenuEditor);
-
-        //Set executor to call execute
-        this.setExecutor(new AddonEntryExecutor(this::execute));
     }
 
     /**
@@ -42,7 +38,8 @@ public class RemoveTagEntry extends AddonMenuEntry {
      *
      * @param entityPlayer The entityPlayer
      */
-    private void execute(EntityPlayer entityPlayer) {
+    @Override
+    public void execute(EntityPlayer entityPlayer) {
         Minecraft.getMinecraft().displayGuiScreen(new GuiYesNo((result, id) -> {
             if (result) {
                 TagManager.getConfigManager().getSettings().getTags().remove(entityPlayer.getName());
