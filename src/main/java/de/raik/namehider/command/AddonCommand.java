@@ -18,18 +18,18 @@ public abstract class AddonCommand {
     private boolean enabled = true;
 
     /**
-     * Addon instance for accessing the addon in the Commands
+     * CommandDispatcher instance for accessing the addon in the Commands
      */
-    private final NameHiderAddon addon;
+    private final CommandDispatcher commandDispatcher;
 
     /**
-     * Constructor to set addon
+     * Constructor to set commandDispatcher
      * variable
      *
-     * @param addon The addon
+     * @param commandDispatcher The addon
      */
-    public AddonCommand(NameHiderAddon addon) {
-        this.addon = addon;
+    public AddonCommand(CommandDispatcher commandDispatcher) {
+        this.commandDispatcher = commandDispatcher;
     }
 
     /**
@@ -85,13 +85,12 @@ public abstract class AddonCommand {
      * Getter for the setting element of the command
      * adding additional callback for changing enabled
      *
-     * @param addon The addon instance for creating the setting
      * @return The setting element
      */
-    public DescribedBooleanElement getSetting(NameHiderAddon addon) {
+    public DescribedBooleanElement getSetting() {
         //Creating setting and adding additional callback
-        DescribedBooleanElement setting = new DescribedBooleanElement("/" + this.getName(), addon, this.getIcon()
-                , this.getName(), this.enabled , this.getDescription(), addon.getConfig().getAsJsonObject("commands"), true);
+        DescribedBooleanElement setting = new DescribedBooleanElement("/" + this.getName(), this.getAddon(), this.getIcon()
+                , this.getName(), this.enabled , this.getDescription(), this.commandDispatcher.getConfig(), true);
         setting.addCallback(changedValue -> this.enabled = changedValue);
 
         return setting;
@@ -136,6 +135,6 @@ public abstract class AddonCommand {
      * @return The addon
      */
     public NameHiderAddon getAddon() {
-        return this.addon;
+        return this.commandDispatcher.getAddon();
     }
 }

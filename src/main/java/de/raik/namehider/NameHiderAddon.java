@@ -15,6 +15,7 @@ import net.labymod.settings.elements.SettingsElement;
 import net.minecraft.client.Minecraft;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,9 +40,10 @@ public class NameHiderAddon extends LabyModAddon {
     private final DisplayConfiguration configuration = new DisplayConfiguration(this, false);
 
     /**
-     * Command handling class in the addon
+     * List handling all sub features
+     * linked hash set because of important order
      */
-    private CommandDispatcher commandDispatcher;
+    private LinkedHashSet<FeatureSection> subFeatures = new LinkedHashSet<>();
 
     /**
      * Executor service for executing code async
@@ -62,8 +64,8 @@ public class NameHiderAddon extends LabyModAddon {
         //Setting core adapter to apply the changes to the rendering
         LabyModCore.setCoreAdapter(new HiderCoreImplementation(this));
 
-        //Creating command dispatcher
-        commandDispatcher = new CommandDispatcher(this);
+        //Adding features
+        this.subFeatures.add(new CommandDispatcher(this));
     }
 
     /**
@@ -87,8 +89,8 @@ public class NameHiderAddon extends LabyModAddon {
         if (addonConfig.has("scoreboards"))
             this.configuration.setScoreboards(addonConfig.get("scoreboards").getAsBoolean());
 
-        //Commands
-        this.commandDispatcher.loadConfig();
+        //Loading config for features
+        this.subFeatures.forEach(FeatureSection::loadConfig);
     }
 
     /**
@@ -152,8 +154,8 @@ public class NameHiderAddon extends LabyModAddon {
             this.userConfigurations.clear();
         }, "Clear", "Clears every user specific configuration."));
 
-        //Commands
-        this.commandDispatcher.addCommandSettings(settings);
+        //Adding feature setting
+        this.subFeatures.forEach(subFeature -> subFeature.addSettings(settings));
     }
 
     /**

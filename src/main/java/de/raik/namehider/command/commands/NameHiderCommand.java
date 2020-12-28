@@ -1,7 +1,7 @@
 package de.raik.namehider.command.commands;
 
-import de.raik.namehider.NameHiderAddon;
 import de.raik.namehider.command.AddonCommand;
+import de.raik.namehider.command.CommandDispatcher;
 import net.labymod.addon.online.AddonInfoManager;
 import net.labymod.addon.online.info.AddonInfo;
 import net.labymod.settings.LabyModAddonsGui;
@@ -51,13 +51,13 @@ public class NameHiderCommand extends AddonCommand {
     }
 
     /**
-     * Constructor to set addon
+     * Constructor to set commandDispatcher
      * variable
      *
-     * @param addon The addon
+     * @param commandDispatcher The addon
      */
-    public NameHiderCommand(NameHiderAddon addon) {
-        super(addon);
+    public NameHiderCommand(CommandDispatcher commandDispatcher) {
+        super(commandDispatcher);
     }
 
     /**

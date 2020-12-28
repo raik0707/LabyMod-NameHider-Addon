@@ -1,11 +1,10 @@
 package de.raik.namehider.command;
 
-import com.google.gson.JsonObject;
+import de.raik.namehider.FeatureSection;
 import de.raik.namehider.NameHiderAddon;
 import de.raik.namehider.command.commands.ExceptNameCommand;
 import de.raik.namehider.command.commands.NameHiderCommand;
 import net.labymod.api.events.MessageSendEvent;
-import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
 
 import java.util.HashSet;
@@ -21,7 +20,7 @@ import java.util.List;
  * @author Raik
  * @version 1.0
  */
-public class CommandDispatcher implements MessageSendEvent {
+public class CommandDispatcher extends FeatureSection implements MessageSendEvent {
 
     /**
      * Addon instance to access it
@@ -40,29 +39,50 @@ public class CommandDispatcher implements MessageSendEvent {
      * @param addon The addon to set
      */
     public CommandDispatcher(NameHiderAddon addon) {
+        super(addon);
+
         this.addon = addon;
 
         //Register event
         addon.getApi().getEventManager().register(this);
 
         //Registering commands
-        this.commands.add(new NameHiderCommand(this.addon));
-        this.commands.add(new ExceptNameCommand(this.addon));
+        this.commands.add(new NameHiderCommand(this));
+        this.commands.add(new ExceptNameCommand(this));
     }
 
     /**
      * Loading the configs for commands
      * to set enabled
      */
+    @Override
     public void loadConfig() {
-        //Adding config
-        if (!addon.getConfig().has("commands"))
-            addon.getConfig().add("commands", new JsonObject());
-
-        JsonObject commandsObject = this.addon.getConfig().getAsJsonObject("commands");
+        super.loadConfig();
 
         //Set for commands
-        this.commands.forEach(command -> command.loadConfig(commandsObject));
+        this.commands.forEach(command -> command.loadConfig(this.getConfig()));
+    }
+
+    /**
+     * Method for feature section to set
+     * the display name
+     *
+     * @return The display name
+     */
+    @Override
+    public String getDisplayName() {
+        return "§7Commands";
+    }
+
+    /**
+     * Method the set the configuration
+     * sub sections name of feature set
+     *
+     * @return The configuration name
+     */
+    @Override
+    public String getConfigName() {
+        return "commands";
     }
 
     /**
@@ -87,18 +107,23 @@ public class CommandDispatcher implements MessageSendEvent {
     }
 
     /**
-     * Method to add command settings dynamically
+     * Method to add settings dynamically
      * to the addon settings
      *
      * @param settings The settings array to add the settings to
      */
-    public void addCommandSettings(List<SettingsElement> settings) {
-        //Header
-        settings.add(new HeaderElement("§7Commands"));
+    @Override
+    public void addSettings(List<SettingsElement> settings) {
+        super.addSettings(settings);
 
         //Adding elements
         for (AddonCommand command: this.commands) {
-            settings.add(command.getSetting(this.addon));
+            settings.add(command.getSetting());
         }
+    }
+
+    @Override
+    public NameHiderAddon getAddon() {
+        return this.addon;
     }
 }

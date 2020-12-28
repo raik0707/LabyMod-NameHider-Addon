@@ -1,8 +1,8 @@
 package de.raik.namehider.command.commands;
 
 import de.raik.namehider.DisplayConfiguration;
-import de.raik.namehider.NameHiderAddon;
 import de.raik.namehider.command.AddonCommand;
+import de.raik.namehider.command.CommandDispatcher;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.ControlElement;
 
@@ -18,13 +18,13 @@ import java.util.HashMap;
 public class ExceptNameCommand extends AddonCommand {
 
     /**
-     * Constructor to set addon
+     * Constructor to set commandDispatcher
      * variable
      *
-     * @param addon The addon
+     * @param commandDispatcher The addon
      */
-    public ExceptNameCommand(NameHiderAddon addon) {
-        super(addon);
+    public ExceptNameCommand(CommandDispatcher commandDispatcher) {
+        super(commandDispatcher);
     }
 
     /**
