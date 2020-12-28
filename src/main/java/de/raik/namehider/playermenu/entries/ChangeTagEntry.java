@@ -8,6 +8,12 @@ import net.labymod.settings.elements.ControlElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
+/**
+ * Entry to change the tag of the current user
+ *
+ * @author Raik
+ * @version 1.0
+ */
 public class ChangeTagEntry extends AddonMenuEntry {
 
     /**

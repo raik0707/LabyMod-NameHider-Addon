@@ -107,4 +107,13 @@ public abstract class AddonMenuEntry extends UserActionEntry {
      */
     public abstract String getDescription();
 
+    /**
+     * Getter for the player menu editor
+     * to access the addon in entries
+     *
+     * @return The editor
+     */
+    public PlayerMenuEditor getPlayerMenuEditor() {
+        return this.playerMenuEditor;
+    }
 }
