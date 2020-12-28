@@ -103,7 +103,7 @@ public abstract class AddonCommand {
      */
     public void loadConfig(JsonObject commandObject) {
         this.enabled = commandObject.has(this.getName()) ? commandObject.get(this.getName()).getAsBoolean() : this.enabled;
-     }
+    }
 
     /**
      * Method to set the name of a command

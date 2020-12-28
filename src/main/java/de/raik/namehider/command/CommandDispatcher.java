@@ -23,11 +23,6 @@ import java.util.List;
 public class CommandDispatcher extends FeatureSection implements MessageSendEvent {
 
     /**
-     * Addon instance to access it
-     */
-    private final NameHiderAddon addon;
-
-    /**
      * Collection of commands for storing
      */
     private final HashSet<AddonCommand> commands = new HashSet<>();
@@ -40,8 +35,6 @@ public class CommandDispatcher extends FeatureSection implements MessageSendEven
      */
     public CommandDispatcher(NameHiderAddon addon) {
         super(addon);
-
-        this.addon = addon;
 
         //Register event
         addon.getApi().getEventManager().register(this);
@@ -120,10 +113,5 @@ public class CommandDispatcher extends FeatureSection implements MessageSendEven
         for (AddonCommand command: this.commands) {
             settings.add(command.getSetting());
         }
-    }
-
-    @Override
-    public NameHiderAddon getAddon() {
-        return this.addon;
     }
 }

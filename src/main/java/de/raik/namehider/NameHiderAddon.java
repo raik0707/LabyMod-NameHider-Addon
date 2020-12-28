@@ -3,6 +3,7 @@ package de.raik.namehider;
 import com.google.gson.JsonObject;
 import de.raik.namehider.command.CommandDispatcher;
 import de.raik.namehider.implementation.HiderCoreImplementation;
+import de.raik.namehider.playermenu.PlayerMenuEditor;
 import de.raik.namehider.settingelements.ButtonElement;
 import de.raik.namehider.settingelements.DescribedBooleanElement;
 import net.labymod.api.LabyModAddon;
@@ -66,6 +67,7 @@ public class NameHiderAddon extends LabyModAddon {
 
         //Adding features
         this.subFeatures.add(new CommandDispatcher(this));
+        this.subFeatures.add(new PlayerMenuEditor(this));
     }
 
     /**
